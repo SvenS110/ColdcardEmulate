@@ -161,7 +161,7 @@ fi
 
 #Instalar dependencias
 echo "Instalar dependencias"
-confirm "¿Quieres continuar"
+confirm "¿Quieres continuar?"
 
 #Verificar e instalar dependencias
 echo "Comprobando e instalando dependencias" 
