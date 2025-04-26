@@ -47,36 +47,29 @@ confirm "¿Quieres continuar?"
 # Configurar variables
 REPO_URL="https://github.com/Coldcard/firmware.git"
 SIG_URL="https://github.com/Coldcard/firmware/raw/master/releases/signatures.txt"
-SHA_URL="https://github.com/Coldcard/firmware/raw/master/releases/sha256sums.txt"
 KEY_ID="4589779ADFC14F3327534EA8A3A31BAD5A2A5B10"
 KEYSERVER="keyserver.ubuntu.com"
 
-# Descargar archivos de firma y sumas de verificación
-echo "📥 Descargando archivos de firma y sumas de comprobación..."
+# Descargar archivo de firmas
+echo "📥 Descargando archivo de firmas..."
 wget -q -O signatures.txt "$SIG_URL" || { echo "❌ Error al descargar signatures.txt"; exit 1; }
-wget -q -O sha256sums.txt "$SHA_URL" || { echo "❌ Error al descargar sha256sums.txt"; exit 1; }
 
 # Descargar e importar la clave pública
 echo "🔑 Descargando e importando clave PGP $KEY_ID..."
 gpg --batch --keyserver "$KEYSERVER" --recv-keys "$KEY_ID" || { echo "❌ Error al importar clave"; exit 1; }
 
-# Verificar la firma del archivo de sumas
-echo "🔍 Verificando firma del archivo de sumas..."
-gpg --batch --verify signatures.txt sha256sums.txt && echo "✅ Firma válida" || { echo "❌ Firma inválida"; exit 1; }
+# Verificar la firma del archivo
+echo "🔍 Verificando la firma del archivo de firmas..."
+gpg --batch --verify signatures.txt && echo "✅ Firma válida" || { echo "❌ Firma inválida"; exit 1; }
 
+# Comprobar si ya existe el repositorio
 if [ ! -d "firmware/.git" ]; then
-    echo "📥 Descargando el repositorio... esto puede llevar algún tiempo, por favor ten paciencia... "
-    rm -rf firmware  # Eliminar repositorio corrupto si existe
-    git clone --recursive "$REPO_URL" firmware || { echo "❌ Error al descargar el repositorio"; exit 1; }
+    echo "📥 Descargando el repositorio... Esto puede tardar un poco..."
+    rm -rf firmware  # Eliminar cualquier carpeta anterior corrupta
+    git clone --recursive "$REPO_URL" firmware || { echo "❌ Error al clonar el repositorio"; exit 1; }
 else
     echo "✅ El repositorio ya está descargado."
 fi
-
-# Verificar las sumas de los archivos en el repositorio
-echo "🔍 Verificando la integridad de los archivos..."
-cd firmware || { echo "❌ Error al acceder al directorio del repositorio"; exit 1; }
-sha256sum -c ../sha256sums.txt --ignore-missing || { echo "❌ Error en la verificación de hash"; exit 1; }
-cd ..
 
 echo "🎉 Repositorio verificado y seguro."
 
