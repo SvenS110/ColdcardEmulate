@@ -254,7 +254,7 @@ chmod +x simulator.py
 
 ###################################################################################
 
-# Ejecutar el simulador en el entorno virtual activo (sin opciones)
+# Ejecutar el simulador en el entorno virtual
 echo "Iniciando simulador de Coldcard Mk4..."
 ./simulator.py -w
 
