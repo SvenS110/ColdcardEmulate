@@ -88,9 +88,9 @@ set +e
 git apply --check unix/linux_addr.patch 2>/dev/null
 if [ $? -eq 0 ]; then
     git apply unix/linux_addr.patch
-    echo "Parche aplicado correctamente."
+    echo "✅ Parche aplicado correctamente."
 else
-    echo "El parche ya estaba aplicado o no es necesario."
+    echo "🤷‍♂️ El parche ya estaba aplicado o no es necesario."
 fi
 set -e
 
@@ -105,9 +105,9 @@ set +e
 git apply --check ../../ubuntu24_mpy.patch 2>/dev/null
 if [ $? -eq 0 ]; then
     git apply ../../ubuntu24_mpy.patch
-    echo "Parche ubuntu24_mpy.patch aplicado correctamente."
+    echo "✅ Parche ubuntu24_mpy.patch aplicado correctamente."
 else
-    echo "El parche ya estaba aplicado o no es necesario."
+    echo "🤷‍♂️ El parche ya estaba aplicado o no es necesario."
 fi
 set -e
 popd > /dev/null
@@ -119,14 +119,14 @@ echo "Crear y activar el entorno virtual Python"
 confirm "¿Quieres continuar?"
 
 if [ ! -d "ENV" ]; then
-	echo "Creando entorno virtual Python..."
+	echo "🐍 Creando entorno virtual Python..."
 	python3 -m venv ENV
 else
-	echo "Entorno virtual ya creado. Activando..."
+	echo "✅ Entorno virtual ya creado. Activando..."
 	
 fi
 
-source ENV/bin/activate || { echo "Error al activar el entorno virtual"; exit 1; }
+source ENV/bin/activate || { echo "❌ Error al activar el entorno virtual"; exit 1; }
 
 
 # Detener script si ocurre un error
@@ -136,12 +136,12 @@ set -e
 
 # Verificar que el entorno virtual esté activado
 if [[ "$(which python)" != *ENV/bin/python ]]; then
-    echo "Error: No se activó el entorno virtual. Intenta activarlo manualmente con:"
+    echo "❌ Error: No se activó el entorno virtual. Intenta activarlo manualmente con:"
     echo "source ~/firmware/ENV/bin/activate"
     exit 1
 fi
 
-echo "Entorno virtual activado correctamente: $(which python)"
+echo "✅ Entorno virtual activado correctamente: $(which python)"
 
 ###################################################################################
 
@@ -149,12 +149,12 @@ echo "Entorno virtual activado correctamente: $(which python)"
 echo "Verificar 'numpy', si no lo instala"
 confirm "¿Quieres continuar?"
 
-echo "Verificando si 'numpy' está instalado..."
+echo "🔍 Verificando si 'numpy' está instalado..."
 if ! pip show numpy &>/dev/null; then
-    echo "'numpy' no está instalado. Instalando..."
+    echo "👨‍💻 'numpy' no está instalado. Instalando..."
     pip install numpy
 else
-    echo "'numpy' ya está instalado"
+    echo "✅ 'numpy' ya está instalado"
 fi
 
 ###################################################################################
@@ -164,10 +164,10 @@ echo "Instalar dependencias"
 confirm "¿Quieres continuar?"
 
 #Verificar e instalar dependencias
-echo "Comprobando e instalando dependencias" 
+echo "👨‍💻 Comprobando e instalando dependencias" 
 pip install --no-cache-dir -U pip setuptools pysdl2-dll
 
-echo "Instalando dependencias de requirements.txt..."
+echo "👨‍💻 Instalando dependencias de requirements.txt..."
 pip install --no-cache-dir -r requirements.txt
 
 ###################################################################################
@@ -186,15 +186,15 @@ echo "Buscar el error en el makefile"
 confirm "¿Quieres continuar?"
 
 # Eliminar la opción '-Wno-error=enum-int-mismatch' del Makefile
-echo "Eliminando '-Wno-error=enum-int-mismatch' del Makefile..."
+echo "🗑️ Eliminando '-Wno-error=enum-int-mismatch' del Makefile..."
 sed -i '/-Wno-error=enum-int-mismatch/d' ~/firmware/external/micropython/ports/unix/Makefile
 
 # Eliminar la opción '-Wno-error=enum-int-mismatch' del parche (si es necesario)
-echo "Eliminando '-Wno-error=enum-int-mismatch' del parche ubuntu24_mpy.patch..."
+echo "🗑️ Eliminando '-Wno-error=enum-int-mismatch' del parche ubuntu24_mpy.patch..."
 sed -i '/-Wno-error=enum-int-mismatch/d' ~/firmware/ubuntu24_mpy.patch
 
 # Eliminar la opción '-Wno-error=enum-int-mismatch' del mpy-cross
-echo "Eliminando '-Wno-error=enum-int-mismatch' del Makefile..."
+echo "🗑️ Eliminando '-Wno-error=enum-int-mismatch' del Makefile..."
 sed -i '/-Wno-error=enum-int-mismatch/d' ~/firmware/external/micropython/mpy-cross/Makefile
 
 ###################################################################################
@@ -255,7 +255,7 @@ chmod +x simulator.py
 ###################################################################################
 
 # Ejecutar el simulador en el entorno virtual
-echo "Iniciando simulador de Coldcard Mk4..."
+echo "⚙️ Iniciando simulador de Coldcard Mk4..."
 ./simulator.py -w
 
 
