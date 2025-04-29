@@ -244,39 +244,19 @@ make
 
 ###################################################################################
 
-#Preguntar al usuario que Coldcard quiere emular
-echo "¿Que Coldcard quieres emular?"
-echo "1) Mk4"
-echo "2) Q1"
-read -p "Elige 1 para Mk4 o 2 para Q1: " coldcard_choice
+# Crear el enlace simbólico hacia coldcard-mpy de Mk4
+ln -sf ../external/micropython/ports/unix/coldcard-mpy coldcard-mpy
 
 ###################################################################################
 
-#Verificando eleccion y configurando
-case $coldcard_choice in
-	1)
-		echo "Emulando Coldcard Mk4..."
-		ln -sf ../external/micropython/ports/unix/coldcard-mpy coldcard-mpy
-		;;
-	2)
-		echo "Emulando Coldcard Q1..."
-		ln -sf ../external/micropython/ports/unix/q1-mpy coldcard-mpy
-		;;
-	*)
-		echo "Opción no valida...Configurando por defecto Coldcard Mk4..."
-		ln -sf ../external/micropython/ports/unix/coldcard-mpy coldcard-mpy
-		;;
-esac
-
-###################################################################################
-
-#Damos los permisos necesarios
+# Dar permisos de ejecución al simulador
 chmod +x simulator.py
 
 ###################################################################################
 
-#Ejecutar el simulador en el entorno virtual activo
-./simulator.py
+# Ejecutar el simulador en el entorno virtual activo (sin opciones)
+echo "Iniciando simulador de Coldcard Mk4..."
+./simulator.py -w
 
 
 
